@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
+
 
 public class Pins : MonoBehaviour
 {
@@ -17,7 +17,17 @@ public class Pins : MonoBehaviour
     public TextMeshProUGUI puntuacion, tiradas;
     private float numTiradas = 0;
 
-    public GameObject PinPrefab;
+    public GameObject PinPrefab, newPosBola;
+
+    private MeshRenderer mesh;
+    private Rigidbody rb; 
+
+
+    private void Start()
+    {
+        mesh = GetComponent<MeshRenderer>();
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {
@@ -49,23 +59,20 @@ public class Pins : MonoBehaviour
     { 
         if (other.gameObject.CompareTag("TriggerBolos"))
         {
-            numTiradas++;
+            SumPoints();
+            StartCoroutine(InstanciateBola(3f));
+        }
 
-            if (numTiradas < 2)
-            {
-                Debug.Log("Has tirado una veces");
-                tiradas.text = "Tiradas : " + numTiradas.ToString();
-                StartCoroutine(DestruirBolos());
-            }
+        if (other.gameObject.CompareTag("ReturnBola"))
+        {
+            SumPoints();
+            StartCoroutine(InstanciateBola(1f));
+        }
 
-            if(numTiradas >= 2)
-            {
-                Debug.Log("Has tirado dos veces");
-                numTiradas = 0;
-                tiradas.text = "Tiradas : " + numTiradas.ToString();
-                StartCoroutine(PosicionarBolos());
-            }
-            
+        if (other.gameObject.CompareTag("Limite"))
+        {
+            Debug.Log("Impulso");
+            rb.AddForce(0,0,-700, ForceMode.Impulse);
         }
     }
 
@@ -90,17 +97,46 @@ public class Pins : MonoBehaviour
             Destroy(pin);
         }
 
-        puntuacion.text = "Tu puntuacion es de " + fallen;
         pins = new GameObject[10];
         fallen = 0;
 
 
         yield return new WaitForSeconds(2f);
-        for(int i = 0; i < posPin.Length; i++)
+        numTiradas = 0;
+        tiradas.text = "Tiradas : " + numTiradas.ToString();
+        puntuacion.text = "Tus Puntos: " + fallen.ToString();
+        for (int i = 0; i < posPin.Length; i++)
         {
             GameObject newpin = Instantiate(PinPrefab, posPin[i].transform.position, Quaternion.identity);
             pins[i] = newpin;
         }
+    }
+
+    private void SumPoints()
+    {
+        numTiradas++;
+
+        if (numTiradas < 2)
+        {
+            tiradas.text = "Tiradas : " + numTiradas.ToString();
+            StartCoroutine(DestruirBolos());
+        }
+
+        if (numTiradas >= 2)
+        {
+            tiradas.text = "Tiradas : " + numTiradas.ToString();
+            StartCoroutine(PosicionarBolos());
+        }
+    }
+
+    private IEnumerator InstanciateBola(float time)
+    {
+        yield return new WaitForSeconds(time);
+        mesh.enabled = false;
+
+        yield return new WaitForSeconds(1f);
+        this.transform.position = newPosBola.transform.position;
+        mesh.enabled = true;
     }
 }
 

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bolo
   - TriggerBolos
+  - ReturnBola
+  - Limite
   layers:
   - Default
   - TransparentFX
