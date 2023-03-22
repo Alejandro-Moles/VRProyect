@@ -10,6 +10,7 @@ public class Pins : MonoBehaviour
     public GameObject[] pins;
     private float thereshold = 0.6f;
     private int fallen;
+    private int points;
     Pin_Object pin_object;
 
     public GameObject[] posPin;
@@ -20,11 +21,16 @@ public class Pins : MonoBehaviour
     public GameObject PinPrefab, newPosBola;
 
     private MeshRenderer mesh;
-    private Rigidbody rb; 
+    private Rigidbody rb;
 
+    public GameObject Panel_Lanzamiento;
+    public TextMeshProUGUI PuntuacionFinal;
+
+    private bool Pleno;
 
     private void Start()
     {
+        Panel_Lanzamiento.SetActive(false);
         mesh = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
     }
@@ -48,11 +54,18 @@ public class Pins : MonoBehaviour
                     {
                         pin_object.isPinFall = true;
                         fallen++;
+                        points++;
                         puntuacion.text = "Tus Puntos: " + fallen.ToString();
+                        PuntuacionFinal.text = "Tu puntuación final es de " + points;
                     }
                 }
             }
         }  
+
+        if(fallen >= 10)
+        {
+            Pleno= true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,25 +78,28 @@ public class Pins : MonoBehaviour
 
         if (other.gameObject.CompareTag("ReturnBola"))
         {
-            SumPoints();
             StartCoroutine(InstanciateBola(1f));
         }
 
         if (other.gameObject.CompareTag("Limite"))
         {
-            Debug.Log("Impulso");
             rb.AddForce(0,0,-700, ForceMode.Impulse);
+        }
+
+        if (other.gameObject.CompareTag("TriggerLanzamiento"))
+        {
+            rb.AddForce(0, 0, -250, ForceMode.Impulse);
         }
     }
 
     private IEnumerator DestruirBolos()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         foreach (GameObject pin in pins)
         {
             if (pin.GetComponent<Pin_Object>().isPinFall)
             {
-                Destroy(pin, 0.5f);
+                Destroy(pin);
             }
  
         }
@@ -91,7 +107,7 @@ public class Pins : MonoBehaviour
 
     private IEnumerator PosicionarBolos()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         foreach (GameObject pin in pins)
         {
             Destroy(pin);
@@ -116,16 +132,24 @@ public class Pins : MonoBehaviour
     {
         numTiradas++;
 
-        if (numTiradas < 2)
-        {
-            tiradas.text = "Tiradas : " + numTiradas.ToString();
-            StartCoroutine(DestruirBolos());
-        }
-
-        if (numTiradas >= 2)
-        {
-            tiradas.text = "Tiradas : " + numTiradas.ToString();
+        if (Pleno){
+            MostrarPuntuacionFinal();
             StartCoroutine(PosicionarBolos());
+        }
+        else
+        {
+            if (numTiradas < 2)
+            {
+                tiradas.text = "Tiradas : " + numTiradas.ToString();
+                StartCoroutine(DestruirBolos());
+            }
+
+            if (numTiradas >= 2)
+            {
+                tiradas.text = "Tiradas : " + numTiradas.ToString();
+                MostrarPuntuacionFinal();
+                StartCoroutine(PosicionarBolos());
+            }
         }
     }
 
@@ -137,6 +161,18 @@ public class Pins : MonoBehaviour
         yield return new WaitForSeconds(1f);
         this.transform.position = newPosBola.transform.position;
         mesh.enabled = true;
+    }
+
+    private void MostrarPuntuacionFinal()
+    {
+        Panel_Lanzamiento.SetActive(true);
+    }
+
+    public void OcultarPuntuacionFinal()
+    {
+        Panel_Lanzamiento.SetActive(false);
+        PuntuacionFinal.text = "";
+        points = 0;
     }
 }
 
