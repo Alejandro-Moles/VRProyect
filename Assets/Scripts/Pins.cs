@@ -26,7 +26,7 @@ public class Pins : MonoBehaviour
     public GameObject Panel_Lanzamiento;
     public TextMeshProUGUI PuntuacionFinal;
 
-    private bool Pleno;
+    private bool Pleno, lanzamiento = true;
 
     private void Start()
     {
@@ -38,6 +38,11 @@ public class Pins : MonoBehaviour
     private void Update()
     {
         DetectarBolos();
+
+        if (Pleno)
+        {
+            PuntuacionFinal.text = "¡PLENO!";
+        }
     }
 
     public void DetectarBolos()
@@ -65,6 +70,7 @@ public class Pins : MonoBehaviour
         if(fallen >= 10)
         {
             Pleno= true;
+            fallen = 0;
         }
     }
 
@@ -72,8 +78,12 @@ public class Pins : MonoBehaviour
     { 
         if (other.gameObject.CompareTag("TriggerBolos"))
         {
-            SumPoints();
-            StartCoroutine(InstanciateBola(3f));
+            if (lanzamiento)
+            {
+                lanzamiento = false;
+                SumPoints();
+                StartCoroutine(InstanciateBola(2f));
+            } 
         }
 
         if (other.gameObject.CompareTag("ReturnBola"))
@@ -83,12 +93,12 @@ public class Pins : MonoBehaviour
 
         if (other.gameObject.CompareTag("Limite"))
         {
-            rb.AddForce(0,0,-700, ForceMode.Impulse);
+            rb.AddForce(0,0,-500, ForceMode.Impulse);
         }
 
         if (other.gameObject.CompareTag("TriggerLanzamiento"))
         {
-            rb.AddForce(0, 0, -250, ForceMode.Impulse);
+            rb.AddForce(0, 0, -350, ForceMode.Impulse);
         }
     }
 
@@ -107,9 +117,10 @@ public class Pins : MonoBehaviour
 
     private IEnumerator PosicionarBolos()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         foreach (GameObject pin in pins)
         {
+            Debug.Log("Destruyendo bolos");
             Destroy(pin);
         }
 
@@ -141,6 +152,7 @@ public class Pins : MonoBehaviour
             if (numTiradas < 2)
             {
                 tiradas.text = "Tiradas : " + numTiradas.ToString();
+                Debug.Log("Destruyo los bolos");
                 StartCoroutine(DestruirBolos());
             }
 
@@ -148,6 +160,7 @@ public class Pins : MonoBehaviour
             {
                 tiradas.text = "Tiradas : " + numTiradas.ToString();
                 MostrarPuntuacionFinal();
+                Debug.Log("Posiciono los bolos");
                 StartCoroutine(PosicionarBolos());
             }
         }
@@ -161,6 +174,8 @@ public class Pins : MonoBehaviour
         yield return new WaitForSeconds(1f);
         this.transform.position = newPosBola.transform.position;
         mesh.enabled = true;
+
+        lanzamiento = true;
     }
 
     private void MostrarPuntuacionFinal()
@@ -170,6 +185,7 @@ public class Pins : MonoBehaviour
 
     public void OcultarPuntuacionFinal()
     {
+        Pleno = false;
         Panel_Lanzamiento.SetActive(false);
         PuntuacionFinal.text = "";
         points = 0;
