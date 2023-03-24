@@ -104,7 +104,7 @@ public class Pins : MonoBehaviour
 
     private IEnumerator DestruirBolos()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
         foreach (GameObject pin in pins)
         {
             if (pin.GetComponent<Pin_Object>().isPinFall)
