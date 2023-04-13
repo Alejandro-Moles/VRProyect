@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9712,6 +9712,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1680082405116346649, guid: b7c9ed494321b644ba92cc643535ea51, type: 3}
+      propertyPath: m_text
+      value: 'Bola Ligera
+
+        Velocidad : Alta
+
+        Peso: Bajo
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 1680082405878234962, guid: b7c9ed494321b644ba92cc643535ea51, type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -10104,6 +10114,14 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 3326662106102948630, guid: ad8f44f6ea170284e973fabd68785a8c, type: 3}
+      propertyPath: m_text
+      value: 'Bola Intermedia
+
+        Velocidad : Media
+
+        Peso: Media'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad8f44f6ea170284e973fabd68785a8c, type: 3}
 --- !u!114 &3326662104964103148 stripped
@@ -10171,6 +10189,16 @@ PrefabInstance:
     - target: {fileID: 5293764994824633059, guid: e789bea72b645884ba481ef90da60f07, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5691848758573779041, guid: e789bea72b645884ba481ef90da60f07, type: 3}
+      propertyPath: m_text
+      value: 'Bola Pesada
+
+        Velocidad : Baja
+
+        Peso: Alto
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 5691848760122285328, guid: e789bea72b645884ba481ef90da60f07, type: 3}
       propertyPath: tiradas
