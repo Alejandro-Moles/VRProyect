@@ -28,6 +28,8 @@ public class Pins : MonoBehaviour
 
     private bool Pleno, lanzamiento = true;
 
+    public AudioSource AudioBolos;
+
     private void Start()
     {
         Panel_Lanzamiento.SetActive(false);
@@ -80,6 +82,7 @@ public class Pins : MonoBehaviour
         {
             if (lanzamiento)
             {
+                AudioBolos.Play();
                 lanzamiento = false;
                 SumPoints();
                 StartCoroutine(InstanciateBola(2f));
