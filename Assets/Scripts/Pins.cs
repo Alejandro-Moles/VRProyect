@@ -29,6 +29,7 @@ public class Pins : MonoBehaviour
     private bool Pleno, lanzamiento = true;
 
     public AudioSource AudioBolos;
+    public AudioSource AudioPleno;
 
     private void Start()
     {
@@ -72,6 +73,7 @@ public class Pins : MonoBehaviour
         if(fallen >= 10)
         {
             Pleno= true;
+            AudioPleno.Play();
             fallen = 0;
         }
     }
