@@ -30,7 +30,6 @@ public class Pins : MonoBehaviour
 
     public AudioSource AudioBolos;
     public AudioSource AudioPleno;
-
     private void Start()
     {
         Panel_Lanzamiento.SetActive(false);
